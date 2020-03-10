@@ -37,7 +37,7 @@ row_nuoro=csv_filtered[csv_filtered$denominazione_provincia=="Nuoro",]
 row_nuoro[,1]="ogliastra"
 csv_filtered=rbind(csv_filtered, row_nuoro)
 
-row_sassari=csv_filtered[csv_filtered$denominazione_provincia=="Nuoro",]
+row_sassari=csv_filtered[csv_filtered$denominazione_provincia=="Sassari",]
 row_sassari[,1]="olbia-tempio"
 csv_filtered=rbind(csv_filtered, row_sassari)
 
@@ -45,7 +45,7 @@ csv_filtered=rbind(csv_filtered, row_sassari)
 csv_filtered=csv_filtered[csv_filtered$denominazione_provincia!="Sud Sardegna",]
 
 
-vect_provinces_file = sort(tolower(paste("provincia di ", csv_filtered$denominazione_provincia,sep="")))
+vect_provinces_file = tolower(paste("provincia di ", csv_filtered$denominazione_provincia,sep=""))
 vect_provinces_file_ok = gsub("provincia di arezzo", "province of arezzo", vect_provinces_file)
 vect_provinces_file_ok = gsub("provincia di brindisi", "province of brindisi", vect_provinces_file_ok)
 vect_provinces_file_ok = gsub("provincia di barletta-andria-trani", "provincia di barletta - andria - trani", vect_provinces_file_ok)
@@ -76,5 +76,7 @@ ggsave(paste("out/immagini_italia_province/img",date_zipped,".jpg",sep=""),curre
 }
 
 
-system("convert -delay 80 out/immagini_italia_province/img*.jpg out/italia_province.gif")
-  
+
+system("ffmpeg -framerate 1/1.9 -pattern_type glob -i 'out/immagini_italia_province/*.png' -c:v libx264 -r 30 -pix_fmt yuv420p -vf scale=500 out/italia_province.mp4")  
+system('ffmpeg -i out/italia_province.mp4 -vf "fps=10,scale=500:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" -loop 0 out/italia_province.gif')
+
