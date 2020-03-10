@@ -8,9 +8,11 @@ library(mapIT)
 library(ggplot2)
 #library(choroplethr)
 #library(choroplethrAdmin1)
-
+library(RColorBrewer)
+library(gtable)
 
 setwd("biblioteca/progetti_personali/web/blog/coronavirus/")
+
 
 # I read csv file
 csv = read.csv("dati/italia_regioni.tsv", sep="\t",check.names=FALSE, stringsAsFactors = FALSE)
@@ -153,7 +155,7 @@ mapIT = function (values, id, data, detail = "regions", dataSource = "istat",
   bg <- graphPar$theme
   th <- do.call(theme, graphPar$themeOption)
   map <- geom_map(aes_string(map_id = "region", fill = "values"), 
-                  map = shapedata, col = graphPar$borderCol, show_guide = graphPar$show_guide, lwd =0.2)
+                  map = shapedata, col = graphPar$borderCol, show_guide = graphPar$show_guide, lwd =0.1)
   lab <- labs(x = "", y = "", title = graphPar$title)
   out <- gp + bg + th + map + lab
   if (discrete == TRUE) {
@@ -173,21 +175,45 @@ mapIT = function (values, id, data, detail = "regions", dataSource = "istat",
   return(out + scf)
 }
 
-for(i in 2:ncol(csv)){
+cases_prev_day=0
+for(i in ncol(csv):2){
   
   # I get the date
   current_date = as.Date(colnames(csv)[i],"%Y_%m_%d")
   cat(format(current_date, format="%A %d %b %Y"))
   
+  current_cases = sum(csv[,i])
+  new_cases = current_cases - cases_prev_day
+  trend=""
+  if(new_cases > 0){
+    trend="↑"
+    } else{
+    trend="↓"
+    }
+  msg=paste(format(current_date, format="%Y-%m-%d"),": ",current_cases," positivi (",trend," ",new_cases," nuovi positivi",")",sep="")
+  cases_prev_day = current_cases
+  
+  
   # I create the map of the day
-  p = mapIT(values = csv[,i], id=csv$Regione, graphPar = list(guide.label = "Positivi", show_grid=FALSE, borderCol="#636363")) +
-    scale_fill_gradient(limits=c(1,max_positive_cases), na.value = "#bdbdbd", low = "#fef0d9", high = "#b30000", name="Positivi") +
-    geom_text(x=3, y=30, label=paste(current_date,"/", )) +
-    theme(legend.title=element_text(size=10))
-  ggsave(paste("out/immagini_italia_regioni/img",colnames(csv)[i],".jpg",sep=""),p, height = 5 , width = 5)
+  p = mapIT(values = cut(csv[,i],breaks=c(0,1,10,100,1000,10000), labels=c("[0,1","[1,10","[10,100)","[100,1000)","[1000,10000)"),include.lowest=TRUE,right=FALSE), id=csv$Regione, graphPar = list(show_grid=FALSE, borderCol="#636363")) +
+    scale_fill_manual(values=c("[0,1" = "#EFF3FF",
+                               "[1,10" = "#BDD7E7",
+                               "[10,100)" = "#6BAED6",
+                               "[100,1000)" = "#3182BD",
+                               "[1000,10000)" = "#08519C"),
+                      name="Positivi",
+                      drop=FALSE) +
+    labs(caption=msg) +
+    theme(plot.caption = element_text(hjust=0.1, size=rel(1),family="Helvetica")) +
+    theme(legend.title=element_text(size=10,family="Helvetica"), legend.text = element_text(size = 8, family="Helvetica"))
+    
+    #guides(shape = guide_legend(override.aes = list(size = 0.1)),
+    #       color = guide_legend(override.aes = list(size = 0.1)))
+
+    ggsave(paste("out/immagini_italia_regioni/img",colnames(csv)[i],".png",sep=""),p, height = 5 , width = 5)
   
   
 }
 
-system("convert -delay 80 out/immagini_italia_regioni/img*.jpg out/italia_regioni.gif")
-  
+system("convert -background white -alpha remove -layers OptimizePlus -delay 200 out/immagini_italia_regioni/img*.png -loop 0 out/italia_regioni.gif")
+system("ffmpeg -framerate 1/2 -pattern_type glob -i 'out/immagini_italia_regioni/*.png' -c:v libx264 -r 30 -pix_fmt yuv420p out/italia_regioni.mp4")  
