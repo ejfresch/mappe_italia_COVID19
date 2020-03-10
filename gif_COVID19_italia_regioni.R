@@ -11,7 +11,7 @@ library(ggplot2)
 library(RColorBrewer)
 library(gtable)
 
-setwd("biblioteca/progetti_personali/web/blog/coronavirus/")
+setwd("biblioteca/progetti_personali/web/blog/COVID19/")
 
 
 # I read csv file
@@ -190,7 +190,7 @@ for(i in ncol(csv):2){
     } else{
     trend="↓"
     }
-  msg=paste(format(current_date, format="%Y-%m-%d"),": ",current_cases," positivi (",trend," ",new_cases," nuovi positivi",")",sep="")
+  msg=paste("Data: ",format(current_date, format="%Y-%m-%d"), "; Fonte: Protezione Civile",sep="")
   cases_prev_day = current_cases
   
   
@@ -204,16 +204,20 @@ for(i in ncol(csv):2){
                       name="Positivi",
                       drop=FALSE) +
     labs(caption=msg) +
-    theme(plot.caption = element_text(hjust=0.1, size=rel(1),family="Helvetica")) +
-    theme(legend.title=element_text(size=10,family="Helvetica"), legend.text = element_text(size = 8, family="Helvetica"))
+    theme(plot.caption = element_text(hjust=0, size=rel(1),family="Helvetica")) +
+    theme(legend.title=element_text(size=10,family="Helvetica"),
+          legend.text = element_text(size = 8, family="Helvetica"),
+          legend.position=c(0.8,0.8),
+          legend.key.size = unit(0.9,"line")
+          )
     
     #guides(shape = guide_legend(override.aes = list(size = 0.1)),
     #       color = guide_legend(override.aes = list(size = 0.1)))
 
-    ggsave(paste("out/immagini_italia_regioni/img",colnames(csv)[i],".png",sep=""),p, height = 5 , width = 5)
+    ggsave(paste("out/immagini_italia_regioni/img",colnames(csv)[i],".png",sep=""),p, height = 5 , width = 4.5)
   
   
 }
 
-system("convert -background white -alpha remove -layers OptimizePlus -delay 200 out/immagini_italia_regioni/img*.png -loop 0 out/italia_regioni.gif")
-system("ffmpeg -framerate 1/2 -pattern_type glob -i 'out/immagini_italia_regioni/*.png' -c:v libx264 -r 30 -pix_fmt yuv420p out/italia_regioni.mp4")  
+system("ffmpeg -framerate 1/1.7 -pattern_type glob -i 'out/immagini_italia_regioni/*.png' -c:v libx264 -r 30 -pix_fmt yuv420p out/italia_regioni.mp4")  
+system('ffmpeg -i out/italia_regioni.mp4 -vf "fps=10,scale=500:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" -loop 0 out/italia_regioni.gif')
