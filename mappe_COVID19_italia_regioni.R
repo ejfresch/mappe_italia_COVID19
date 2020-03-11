@@ -219,5 +219,5 @@ for(i in ncol(csv):2){
   
 }
 
-system("ffmpeg -framerate 1/1.7 -pattern_type glob -i 'out/immagini_italia_regioni/*.png' -c:v libx264 -r 30 -pix_fmt yuv420p out/italia_regioni.mp4")  
+system("ffmpeg -framerate 1/1.9 -pattern_type glob -i 'out/immagini_italia_regioni/*.png' -c:v libx264 -r 30 -pix_fmt yuv420p out/italia_regioni.mp4")  
 system('ffmpeg -i out/italia_regioni.mp4 -vf "fps=10,scale=500:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" -loop 0 out/italia_regioni.gif')
