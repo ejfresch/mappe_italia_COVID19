@@ -1,21 +1,49 @@
 #!/usr/bin/Rscript
+
+#setwd("biblioteca/progetti_personali/web/blog/mappe_italia_COVID19/")
+
 #install.packages(c("devtools", "lubridate"))
-library(devtools)
+#library(devtools)
 #install_github("quantide/mapIT")
 
 library(lubridate)
 library(mapIT)
 library(ggplot2)
-#library(choroplethr)
-#library(choroplethrAdmin1)
 library(RColorBrewer)
-library(gtable)
 
-setwd("biblioteca/progetti_personali/web/blog/COVID19/")
+# I build a csv
+data_files = list.files("dati/dati_protezione_civile/COVID-19-master/dati-regioni/",pattern="-2020")
 
+csv_exists = FALSE
 
-# I read csv file
-csv = read.csv("dati/italia_regioni.tsv", sep="\t",check.names=FALSE, stringsAsFactors = FALSE)
+for(current_f in sort(data_files,decreasing = TRUE)){
+  current_csv = read.csv(paste("dati/dati_protezione_civile/COVID-19-master/dati-regioni/",current_f,sep=""),check.names=FALSE, stringsAsFactors = FALSE, fileEncoding = "iso-8859-1")
+  # I get the date
+  current_date = as.Date(current_f,"dpc-covid19-ita-regioni-%Y%m%d.csv")
+  date_zipped=format(current_date, format="%Y_%m_%d")
+  # select and rename columns
+  cols=colnames(current_csv)
+  cols=gsub("totale_casi","casi_totali",cols)
+  cols=gsub("denominazione_regione","Regione",cols)
+  colnames(current_csv)=cols
+  current_csv = current_csv[,c("Regione","casi_totali")]
+  colnames(current_csv)=c("Regione",date_zipped)
+  #fix Trento and Bolzano autonomous provinces (compatibility)
+  count_trento_bolzano=sum(current_csv[current_csv$Regione %in% c("Trento", "Bolzano"),date_zipped])
+  temp_trentino_alto_adige=data.frame("Trentino Alto Adige",count_trento_bolzano)
+  names(temp_trentino_alto_adige)=c("Regione", date_zipped)
+  current_csv=current_csv[!current_csv$Regione %in% c("Trento", "Bolzano"),]
+  current_csv=rbind(current_csv,temp_trentino_alto_adige)
+  # if the object csv does not exists I create it. Otherwise I populate it with new columns
+  if(! csv_exists){
+    csv=current_csv
+    csv_exists = TRUE
+  }else{
+      csv=merge(csv,current_csv, by = "Regione")
+    }
+    
+}
+
 
 # I get the max num of positives in order to set the scale
 max_positive_cases = max(csv[,2:ncol(csv)])
@@ -211,13 +239,11 @@ for(i in ncol(csv):2){
           legend.key.size = unit(0.9,"line")
           )
     
-    #guides(shape = guide_legend(override.aes = list(size = 0.1)),
-    #       color = guide_legend(override.aes = list(size = 0.1)))
 
-    ggsave(paste("out/immagini_italia_regioni/img",colnames(csv)[i],".png",sep=""),p, height = 5 , width = 4.5)
+    ggsave(paste("out/mappe_giornaliere_regioni/mappa_covid19_italia_",colnames(csv)[i],".png",sep=""),p, height = 5 , width = 4.5)
   
   
 }
 
-system("ffmpeg -framerate 1/1.9 -pattern_type glob -i 'out/immagini_italia_regioni/*.png' -c:v libx264 -r 30 -pix_fmt yuv420p out/italia_regioni.mp4")  
-system('ffmpeg -i out/italia_regioni.mp4 -vf "fps=10,scale=500:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" -loop 0 out/italia_regioni.gif')
+system("ffmpeg -framerate 1/1.9 -pattern_type glob -i 'out/mappe_giornaliere_regioni/mappa*.png' -c:v libx264 -r 30 -pix_fmt yuv420p out/mp4_dinamica_regioni/dinamica_covid19_italia.mp4")  
+system('ffmpeg -i out/mp4_dinamica_regioni/dinamica_covid19_italia.mp4 -vf "fps=10,scale=500:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" -loop 0 out/mappa_dinamica_regioni/mappa_dinamica_covid19_italia.gif')
