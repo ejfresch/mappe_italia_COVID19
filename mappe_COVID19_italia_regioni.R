@@ -23,13 +23,12 @@ for(current_f in sort(data_files,decreasing = TRUE)){
   date_zipped=format(current_date, format="%Y_%m_%d")
   # select and rename columns
   cols=colnames(current_csv)
-  cols=gsub("totale_casi","casi_totali",cols)
   cols=gsub("denominazione_regione","Regione",cols)
   colnames(current_csv)=cols
-  current_csv = current_csv[,c("Regione","casi_totali")]
+  current_csv = current_csv[,c("Regione","totale_attualmente_positivi")]
   colnames(current_csv)=c("Regione",date_zipped)
   #fix Trento and Bolzano autonomous provinces (compatibility)
-  count_trento_bolzano=sum(current_csv[current_csv$Regione %in% c("P.A Trento", "P.A. Bolzano"),date_zipped])
+  count_trento_bolzano=sum(current_csv[current_csv$Regione %in% c("P.A. Trento", "P.A. Bolzano"),date_zipped])
   temp_trentino_alto_adige=data.frame("Trentino Alto Adige",count_trento_bolzano)
   names(temp_trentino_alto_adige)=c("Regione", date_zipped)
   current_csv=current_csv[!current_csv$Regione %in% c("Trento", "Bolzano"),]
