@@ -21,7 +21,7 @@ date_zipped=format(current_date, format="%Y%m%d")
 msg=paste("Data: ",format(current_date, format="%Y-%m-%d"), "; Dati: Protezione Civile",sep="")
 
 # I read csv file
-if(current_f %in% c("dpc-covid19-ita-province-20200311.csv")){ 
+if(current_f %in% list.files("dati/dati_protezione_civile/COVID-19-master/dati-province/",pattern="-2020031[1-9]")){ 
 csv = read.csv(paste("dati/dati_protezione_civile/COVID-19-master/dati-province/",current_f,sep=""),check.names=FALSE, stringsAsFactors = FALSE , fileEncoding="ISO-8859-1")
 }else{
 csv = read.csv(paste("dati/dati_protezione_civile/COVID-19-master/dati-province/",current_f,sep=""),check.names=FALSE, stringsAsFactors = FALSE)
