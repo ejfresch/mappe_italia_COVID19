@@ -1,15 +1,15 @@
 #!/usr/bin/Rscript
 
+setwd("biblioteca/progetti_personali/mappe_italia_COVID19/")
+
+
 library(lubridate)
 library(ggplot2)
 library(choroplethr)
 library(choroplethrAdmin1)
 library(RColorBrewer)
 
-setwd("biblioteca/progetti_personali/web/blog/mappe_italia_COVID19/")
-
-
-data_files = list.files("dati/dati_protezione_civile/COVID-19-master/dati-province/",pattern="-2020")
+data_files = list.files("dati/dati_protezione_civile/COVID-19-master/dati-province/",pattern="-2020",)
 
 for(current_f in data_files){
 
@@ -21,7 +21,7 @@ date_zipped=format(current_date, format="%Y%m%d")
 msg=paste("Data: ",format(current_date, format="%Y-%m-%d"), "; Fonte: Protezione Civile",sep="")
 
 # I read csv file
-csv = read.csv(paste("dati/dati_protezione_civile/COVID-19-master/dati-province/",current_f,sep=""),check.names=FALSE, stringsAsFactors = FALSE, fileEncoding = "iso-8859-1")
+csv = read.csv(paste("dati/dati_protezione_civile/COVID-19-master/dati-province/",current_f,sep=""),check.names=FALSE, stringsAsFactors = FALSE, fileEncoding = "UTF-8")
 cols=colnames(csv)
 cols=gsub("totale_casi","casi_totali",cols)
 colnames(csv)=cols
@@ -52,6 +52,7 @@ vect_provinces_file_ok = gsub("provincia di arezzo", "province of arezzo", vect_
 vect_provinces_file_ok = gsub("provincia di brindisi", "province of brindisi", vect_provinces_file_ok)
 vect_provinces_file_ok = gsub("provincia di barletta-andria-trani", "provincia di barletta - andria - trani", vect_provinces_file_ok)
 vect_provinces_file_ok = gsub("provincia di forlì-cesena", "provincia di forli", vect_provinces_file_ok)
+vect_provinces_file_ok = gsub("provincia di forl�-cesena", "provincia di forli", vect_provinces_file_ok)
 vect_provinces_file_ok = gsub("provincia di reggio di calabria", "provincia di reggio calabria", vect_provinces_file_ok)
 vect_provinces_file_ok = gsub("provincia di vibo valentia", "provincia di vibo-valentia", vect_provinces_file_ok)
 vect_provinces_file_ok = gsub("provincia di ascoli piceno", "province of ascoli piceno", vect_provinces_file_ok)
@@ -60,6 +61,7 @@ vect_provinces_file_ok = gsub("provincia di massa carrara", "provincia di massa-
 vect_provinces_file_ok = gsub("provincia di monza e della brianza", "provincia di monza e brianza", vect_provinces_file_ok)
 vect_provinces_file_ok = gsub("provincia di reggio nell'emilia", "provincia di reggio emilia", vect_provinces_file_ok)
 vect_provinces_file_ok = gsub("provincia di verbano-cusio-ossola", "provincia verbano-cusio-ossola", vect_provinces_file_ok)
+
 
 csv_filtered$region=vect_provinces_file_ok
 
@@ -79,7 +81,7 @@ current_map = admin1_choropleth("italy", csv_filtered,
         legend.text = element_text(size = 8, family="Helvetica"),
         legend.position=c(1,0.8),
         legend.key.size = unit(0.8,"line")
-        )
+        ) 
 
 ggsave(paste("out/mappe_giornaliere_province/mappa_covid19_italia_",date_zipped,".png",sep=""),current_map, height = 5 , width = 5)
 
