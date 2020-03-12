@@ -1,6 +1,6 @@
 #!/usr/bin/Rscript
 
-#setwd("biblioteca/progetti_personali/web/blog/mappe_italia_COVID19/")
+setwd("biblioteca/progetti_personali/mappe_italia_COVID19/")
 
 #install.packages(c("devtools", "lubridate"))
 #library(devtools)
