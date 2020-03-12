@@ -70,7 +70,7 @@ italy_map = get_admin1_map("italy")
 
 vect_provinces_map = sort(unique(italy_map$region)) 
 
-csv_filtered$value=cut(csv_filtered$casi_totali,breaks=c(0,1,10,100,1000,10000),include.lowest=TRUE,right=FALSE)
+csv_filtered$value=cut(csv_filtered$casi_totali,breaks=c(0,1,10,100,1000,10000),labels=c("[0,1","[1,10","[10,100)","[100,1000)","[1000,10000)"),include.lowest=TRUE,right=FALSE)
 
 current_map = admin1_choropleth("italy", csv_filtered, 
                              num_colors = 5, 

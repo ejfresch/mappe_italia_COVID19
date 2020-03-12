@@ -56,4 +56,4 @@ Per questioni di semplicità  e compatibilità con i pacchetti `R` nella mappa d
 ### Miglioramenti possibili
 
 - Per risolvere i problemi relativi alle ai nomi/confini delle province/regioni si potrebbero utilizzare i file `.geojson` del progetto [Openpolis / geojson-italy](https://github.com/openpolis/geojson-italy/) e utilizzare altri pacchetti `R` per visualizzare le mappe. 
-- Il colore e la dimensione del tratto utilizzato per delimitare i confini delle province non sono ottimali. Nella legenda nella mappa delle province i numeri sono in notazione scientifica. La documentazione di `choroplethr`  disponibile gratuitamente è piuttosto scarsa.
+- Il colore e la dimensione del tratto utilizzato per delimitare i confini delle province non sono ottimali. La documentazione di `choroplethr`  disponibile gratuitamente è piuttosto scarsa.
