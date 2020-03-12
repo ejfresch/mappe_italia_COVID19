@@ -1,6 +1,6 @@
 #!/usr/bin/Rscript
 
-setwd("biblioteca/progetti_personali/mappe_italia_COVID19/")
+setwd("~/biblioteca/progetti_personali/mappe_italia_COVID19/")
 
 #install.packages(c("devtools", "lubridate"))
 #library(devtools)
@@ -29,7 +29,7 @@ for(current_f in sort(data_files,decreasing = TRUE)){
   current_csv = current_csv[,c("Regione","casi_totali")]
   colnames(current_csv)=c("Regione",date_zipped)
   #fix Trento and Bolzano autonomous provinces (compatibility)
-  count_trento_bolzano=sum(current_csv[current_csv$Regione %in% c("Trento", "Bolzano"),date_zipped])
+  count_trento_bolzano=sum(current_csv[current_csv$Regione %in% c("P.A Trento", "P.A. Bolzano"),date_zipped])
   temp_trentino_alto_adige=data.frame("Trentino Alto Adige",count_trento_bolzano)
   names(temp_trentino_alto_adige)=c("Regione", date_zipped)
   current_csv=current_csv[!current_csv$Regione %in% c("Trento", "Bolzano"),]
@@ -218,7 +218,7 @@ for(i in ncol(csv):2){
     } else{
     trend="↓"
     }
-  msg=paste("Data: ",format(current_date, format="%Y-%m-%d"), "; Fonte: Protezione Civile",sep="")
+  msg=paste("Data: ",format(current_date, format="%Y-%m-%d"), "; Dati: Protezione Civile",sep="")
   cases_prev_day = current_cases
   
   
@@ -245,5 +245,5 @@ for(i in ncol(csv):2){
   
 }
 
-system("ffmpeg -framerate 1/1.9 -pattern_type glob -i 'out/mappe_giornaliere_regioni/mappa*.png' -c:v libx264 -r 30 -pix_fmt yuv420p out/mp4_dinamica_regioni/dinamica_covid19_italia.mp4")  
-system('ffmpeg -i out/mp4_dinamica_regioni/dinamica_covid19_italia.mp4 -vf "fps=10,scale=500:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" -loop 0 out/mappa_dinamica_regioni/mappa_dinamica_covid19_italia.gif')
+system("ffmpeg -y -framerate 1/1.9 -pattern_type glob -i 'out/mappe_giornaliere_regioni/mappa*.png' -c:v libx264 -r 30 -pix_fmt yuv420p out/mp4_dinamica_regioni/dinamica_covid19_italia.mp4")  
+system('ffmpeg -y -i out/mp4_dinamica_regioni/dinamica_covid19_italia.mp4 -vf "fps=10,scale=500:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" -loop 0 out/mappa_dinamica_regioni/mappa_dinamica_covid19_italia.gif')
