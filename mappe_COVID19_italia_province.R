@@ -1,6 +1,6 @@
 #!/usr/bin/Rscript
 
-setwd("biblioteca/progetti_personali/mappe_italia_COVID19/")
+setwd("~/biblioteca/progetti_personali/mappe_italia_COVID19/")
 
 
 library(lubridate)
@@ -9,7 +9,7 @@ library(choroplethr)
 library(choroplethrAdmin1)
 library(RColorBrewer)
 
-data_files = list.files("dati/dati_protezione_civile/COVID-19-master/dati-province/",pattern="-2020",)
+data_files = list.files("dati/dati_protezione_civile/COVID-19-master/dati-province/",pattern="-2020")
 
 for(current_f in data_files){
 
@@ -18,10 +18,14 @@ current_date = as.Date(current_f,"dpc-covid19-ita-province-%Y%m%d.csv")
 cat(format(current_date, format="%A %d %b %Y"),"\n")
 date_zipped=format(current_date, format="%Y%m%d")
   
-msg=paste("Data: ",format(current_date, format="%Y-%m-%d"), "; Fonte: Protezione Civile",sep="")
+msg=paste("Data: ",format(current_date, format="%Y-%m-%d"), "; Dati: Protezione Civile",sep="")
 
 # I read csv file
-csv = read.csv(paste("dati/dati_protezione_civile/COVID-19-master/dati-province/",current_f,sep=""),check.names=FALSE, stringsAsFactors = FALSE, fileEncoding = "UTF-8")
+if(current_f %in% c("dpc-covid19-ita-province-20200311.csv")){ 
+csv = read.csv(paste("dati/dati_protezione_civile/COVID-19-master/dati-province/",current_f,sep=""),check.names=FALSE, stringsAsFactors = FALSE , fileEncoding="ISO-8859-1")
+}else{
+csv = read.csv(paste("dati/dati_protezione_civile/COVID-19-master/dati-province/",current_f,sep=""),check.names=FALSE, stringsAsFactors = FALSE)
+}
 cols=colnames(csv)
 cols=gsub("totale_casi","casi_totali",cols)
 colnames(csv)=cols
@@ -89,6 +93,6 @@ ggsave(paste("out/mappe_giornaliere_province/mappa_covid19_italia_",date_zipped,
 
 
 
-system("ffmpeg -framerate 1/1.9 -pattern_type glob -i 'out/mappe_giornaliere_province/*.png' -c:v libx264 -r 30 -pix_fmt yuv420p out/mp4_dinamica_province/dinamica_covid19_italia.mp4")  
-system('ffmpeg -i out/mp4_dinamica_province/dinamica_covid19_italia.mp4 -vf "fps=10,scale=500:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" -loop 0 out/mappa_dinamica_province/dinamica_covid19_italia.gif')
+system("ffmpeg -y -framerate 1/1.9 -pattern_type glob -i 'out/mappe_giornaliere_province/*.png' -c:v libx264 -r 30 -pix_fmt yuv420p out/mp4_dinamica_province/dinamica_covid19_italia.mp4")  
+system('ffmpeg -y -i out/mp4_dinamica_province/dinamica_covid19_italia.mp4 -vf "fps=10,scale=500:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" -loop 0 out/mappa_dinamica_province/dinamica_covid19_italia.gif')
 
