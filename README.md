@@ -16,7 +16,7 @@ Le mappe sono disponibili per il download nelle cartelle `out_mappa_dinamica_reg
 
 ## Filmati .mp4
 
-I filmati `.mp4` forniscono le stesse informazioni delle mappe "dinamiche", ma permettono all'utente di interrompere la riproduzione del filmato e fare i confronti che desidera invece di dover aspettare il ciclo successivo delle immagini `.gif` animate. I filmati sono disponibili nelle cartelle `out/mp4_dinamica_regioni` e `out_mp4_dinamica_province`.
+I filmati `.mp4` forniscono le stesse informazioni delle mappe "dinamiche", ma permettono all'utente di interrompere la riproduzione del filmato e fare i confronti che desidera invece di dover aspettare il ciclo successivo delle immagini `.gif` animate. I filmati sono disponibili nelle cartelle `out/mp4_dinamica_regioni` e `out/mp4_dinamica_province`.
 
 ## Mappe giornaliere
 
