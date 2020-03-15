@@ -16,21 +16,29 @@ Le mappe sono disponibili per il download nelle cartelle `out_mappa_dinamica_reg
 
 ## Filmati .mp4
 
-I filmati `.mp4` forniscono le stesse informazioni delle mappe "dinamiche", ma permettono all'utente interrompere la riproduzione del filmato e fare i confronti che desidera invece di dover aspettare il ciclo successivo delle immagini `.gif` animate. I filmati sono disponibili nelle cartelle `out/mp4_dinamica_regioni` e `out_mp4_dinamica_province`.
+I filmati `.mp4` forniscono le stesse informazioni delle mappe "dinamiche", ma permettono all'utente di interrompere la riproduzione del filmato e fare i confronti che desidera invece di dover aspettare il ciclo successivo delle immagini `.gif` animate. I filmati sono disponibili nelle cartelle `out/mp4_dinamica_regioni` e `out_mp4_dinamica_province`.
 
 ## Mappe giornaliere
 
 Le mappe giornaliere sono mappe "statiche" che permettono di capire quanti casi positivi c'erano/ci sono in un determinato giorno e fare confronti tra regioni/province. Ecco la mappa più recente delle regioni:
 
-<img src="out/mappe_giornaliere_regioni/mappa_covid19_italia_2020_03_12.png" width="500">
+<img src="out/mappe_giornaliere_regioni/mappa_covid19_italia_2020_03_15.png" width="500" align="center">
 
 E quella delle province:
 
-<img src="out/mappe_giornaliere_province/mappa_covid19_italia_20200312.png" width="550" align="center">
-
-
+<img src="out/mappe_giornaliere_province/mappa_covid19_italia_20200315.png" width="550" align="center">
 
 Le altre mappe sono disponibili nelle cartelle `out/mappe_giornaliere_regioni` e `out_mappe_giornaliere_province`.
+
+
+
+## Serie temporale dei casi positivi 
+
+Uno dei grafici di base per capire la dinamica di un'epidemia  (e soprattutto quando si raggiunge il cosiddetto picco dei casi) è la serie temporale dei casi. Il grafico riportato qui sotto descrive il numero dei casi positivi ("casi attualmente positivi") riportati ogni giorno dalla Protezione Civile in funzione del tempo:
+
+<img src="out/serie_temporale_casi_positivi/serie_temporale_casi_positivi.png" width="500" align="center">  
+
+**NOTA**: la scala dell'asse Y è logaritmica.
 
 
 
@@ -42,8 +50,6 @@ I dati sono stati ottenuti dal [repository github COVID-19](https://github.com/p
 ### Licenza
 
 Le immagini (`.gif`, `.png`) e i filmati (`.mp4`) sono rilasciati con licenza Creative Commons [CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/deed.it). Gli script sono rilasciati con licenza `GPLv3`.
-
-
 
 ### Implementazione
 Gli script per generare le mappe / immagini .gif / filmati sono scritti in `R`. I pacchetti chiave sono `ggplot2`, `mapIT`, `choroplethrAdmin1`, `lubridate` e `RColorBrewer`. Gli script utilizzano `ffmpeg` per generare le `.gif` e i filmati e sono stati testati su Linux (Ubuntu 18.04.4 LTS).
@@ -57,4 +63,5 @@ Per questioni di semplicità  e compatibilità con i pacchetti `R` nella mappa d
 
 - Per risolvere i problemi relativi alle ai nomi/confini delle province/regioni si potrebbero utilizzare i file `.geojson` del progetto [Openpolis / geojson-italy](https://github.com/openpolis/geojson-italy/) e utilizzare altri pacchetti `R` per visualizzare le mappe. 
 - Il colore e la dimensione del tratto utilizzato per delimitare i confini delle province non sono ottimali. La documentazione di `choroplethr`  disponibile gratuitamente è piuttosto scarsa.
-- Migliorare la gestione della codifica dei file (fileEncoding)
+- I colori della mappa delle regioni e quella delle province sono differenti. Il problema è ancora `choroplethr`.
+- ~~Migliorare la gestione della codifica dei file (fileEncoding)~~ Penso che i ragazzi del DPC abbiano standardizzato la codifica dei file (15 Aprile). 
