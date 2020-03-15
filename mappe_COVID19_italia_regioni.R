@@ -222,12 +222,14 @@ for(i in ncol(csv):2){
   
   
   # I create the map of the day
-  p = mapIT(values = cut(csv[,i],breaks=c(0,1,10,100,1000,10000), labels=c("[0,1","[1,10","[10,100)","[100,1000)","[1000,10000)"),include.lowest=TRUE,right=FALSE), id=csv$Regione, graphPar = list(show_grid=FALSE, borderCol="#636363")) +
-    scale_fill_manual(values=c("[0,1" = "#EFF3FF",
-                               "[1,10" = "#BDD7E7",
-                               "[10,100)" = "#6BAED6",
-                               "[100,1000)" = "#3182BD",
-                               "[1000,10000)" = "#08519C"),
+  p = mapIT(values = cut(csv[,i],breaks=c(0,1,10,100,1000,10000,100000), labels=c("[0,1)","[1,10)","[10,100)","[100,1000)","[1000,10000)","[10000,100000)"),include.lowest=TRUE,right=FALSE), id=csv$Regione, graphPar = list(show_grid=FALSE, borderCol="#636363")) +
+    scale_fill_manual(values=c("[0,1)" = "#bdbdbd",
+                               "[1,10)" = "#eff3ff",
+                               "[10,100)" = "#bdd7e7",
+                               "[100,1000)" = "#6baed6",
+                               "[1000,10000)" = "#3182bd",
+                               "[10000,100000)" = "#08519c"
+                               ),
                       name="Positivi",
                       drop=FALSE) +
     labs(caption=msg) +
