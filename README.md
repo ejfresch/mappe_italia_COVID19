@@ -12,7 +12,7 @@ E quella delle province:
 
 
 
-Le mappe sono disponibili per il download nelle cartelle `out_mappa_dinamica_regioni` e `out_mappa_dinamica_province`.
+Le mappe sono disponibili per il download nelle cartelle `out/mappa_dinamica_regioni` e `out/mappa_dinamica_province`.
 
 ## Filmati .mp4
 
@@ -28,7 +28,7 @@ E quella delle province:
 
 <img src="out/mappe_giornaliere_province/mappa_covid19_italia_20200315.png" width="550" align="center">
 
-Le altre mappe sono disponibili nelle cartelle `out/mappe_giornaliere_regioni` e `out_mappe_giornaliere_province`.
+Le altre mappe sono disponibili nelle cartelle `out/mappe_giornaliere_regioni` e `out/mappe_giornaliere_province`.
 
 
 
