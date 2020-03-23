@@ -22,11 +22,11 @@ I filmati `.mp4` forniscono le stesse informazioni delle mappe "dinamiche", ma p
 
 Le mappe giornaliere sono mappe "statiche" che permettono di capire quanti casi positivi c'erano/ci sono in un determinato giorno e fare confronti tra regioni/province. Ecco la mappa più recente delle regioni:
 
-<img src="out/mappe_giornaliere_regioni/mappa_covid19_italia_2020_03_17.png" width="500" align="center">
+<img src="out/mappe_giornaliere_regioni/mappa_covid19_italia_2020_03_23.png" width="500" align="center">
 
 E quella delle province:
 
-<img src="out/mappe_giornaliere_province/mappa_covid19_italia_20200317.png" width="550" align="center">
+<img src="out/mappe_giornaliere_province/mappa_covid19_italia_20200323.png" width="550" align="center">
 
 Le altre mappe sono disponibili nelle cartelle `out/mappe_giornaliere_regioni` e `out/mappe_giornaliere_province`.
 
